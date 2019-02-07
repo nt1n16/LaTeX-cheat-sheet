@@ -1,0 +1,769 @@
+\documentclass[12pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[greek, english]{babel}
+\usepackage{fontawesome}
+\let\ccby=\CCby
+\usepackage{ccicons,cclicenses} %loaded after fontawsome, as ccby is defined there as well
+\usepackage{marvosym,metalogo,hologo}
+\usepackage{eurosym} %loaded after marvosym, as it conflicts with the EUR definition there
+\usepackage[landscape, a3paper]{geometry}
+\usepackage{hyperref}
+\hypersetup{
+	pdfauthor={Niko Tsakalakis},
+	pdftitle={\LaTeXe Cheat Sheet},
+	colorlinks,
+	urlcolor={cyan},
+	bookmarks={true}
+	}
+
+\usepackage[
+type={CC},
+imagemodifier={-eu},
+modifier={by-nc-sa},
+version={3.0},
+imagewidth={5em},
+]{doclicense}
+
+% To make this come out properly in landscape mode, do one of the following
+% 1.
+%  pdflatex latexsheet.tex
+%
+% 2.
+%  latex latexsheet.tex
+%  dvips -P pdf  -t landscape latexsheet.dvi
+%  ps2pdf latexsheet.ps
+
+
+% If you're reading this, be prepared for confusion.  Making this was
+% a learning experience for me, and it shows.  Much of the placement
+% was hacked in; if you make it better, let me know...
+
+
+% 2008-04
+% Changed page margin code to use the geometry package. Also added code for
+% conditional page margins, depending on paper size. Thanks to Uwe Ziegenhagen
+% for the suggestions.
+
+% 2006-08
+% Made changes based on suggestions from Gene Cooperman. <gene at ccs.neu.edu>
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{\LaTeXe\ Cheat Sheet}} \\
+\end{center}
+
+{\tiny
+	{\textcopyright}2019 Niko Tsakalakis \hspace*{1px} \faEnvelope \hspace*{0.5px} \url{N.Tsakalakis@soton.ac.uk} \faGlobe \hspace*{0.5px} \url{https://www.ecs.soton.ac.uk/people/nt4g14} \\ \doclicenseText \doclicenseImage
+} 
+
+
+\section{Document classes}
+\begin{tabular}{@{}ll@{}}
+\verb!book!    & Default is two-sided. \\
+\verb!report!  & No \verb!\part! divisions. \\
+\verb!article! & No \verb!\part! or \verb!\chapter! divisions. \\
+\verb!letter!  & Letter (?). \\
+\verb!slides!  & Large sans-serif font.
+\end{tabular}
+
+Used at the very beginning of a document:
+\verb!\documentclass{!\textit{class}\verb!}!.  Use
+\verb!\begin{document}! to start content and \verb!\end{document}! to
+end the document.
+
+
+\subsection{Common \texttt{documentclass} options}
+\newlength{\MyLen}
+\settowidth{\MyLen}{\texttt{letterpaper}/\texttt{a4paper} \ }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\texttt{10pt}/\texttt{11pt}/\texttt{12pt} & Font size. \\
+\texttt{letterpaper}/\texttt{a4paper} & Paper size. \\
+\texttt{twocolumn} & Use two columns. \\
+\texttt{twoside}   & Set margins for two-sided. \\
+\texttt{landscape} & Landscape orientation.  Must use
+                     \texttt{dvips -t landscape}. \\
+\texttt{draft}     & Double-space lines.
+\end{tabular}
+
+Usage:
+\verb!\documentclass[!\textit{opt,opt}\verb!]{!\textit{class}\verb!}!.
+
+
+\subsection{Packages}
+\settowidth{\MyLen}{\texttt{multicol} }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+%\begin{tabular}{@{}ll@{}}
+\texttt{fullpage}  &  Use 1 inch margins. \\
+\texttt{anysize}   &  Set margins: \verb!\marginsize{!\textit{l}%
+                        \verb!}{!\textit{r}\verb!}{!\textit{t}%
+                        \verb!}{!\textit{b}\verb!}!.            \\
+\texttt{multicol}  &  Use $n$ columns: 
+                        \verb!\begin{multicols}{!$n$\verb!}!.   \\
+\texttt{latexsym}  &  Use \LaTeX\ symbol font. \\
+\texttt{graphicx}  &  Show image:
+                        \verb!\includegraphics[width=!%
+                        \textit{x}\verb!]{!%
+                        \textit{file}\verb!}!. \\
+\texttt{url}       & Insert URL: \verb!\url{!%
+                        \textit{http://\ldots}%
+                        \verb!}!. \\
+\texttt{hyperref} & Wrap long URL: \verb!\href{!%
+							\textit{http://\ldots}%
+							\verb!}{!\textit{http://\ldots}\verb!}!. \\
+\end{tabular}
+
+Use before \verb!\begin{document}!. 
+Usage: \verb!\usepackage{!\textit{package1, package2...}\verb!}!
+
+\subsection{PDF Metadata}
+Enter PDF metadata inside the \textit{pdfinfo} package:\\
+\verb|\pdfinfo{| \\
+\hspace{5mm}\verb|	/Title (|\textit{title}\verb|)|\\
+\hspace{5mm}\verb|	/Author (|\textit{author}\verb|)|\\
+\hspace{5mm}\verb|	/Creator (|\textit{creator}\verb|)|\\
+\hspace{5mm}\verb|	/Producer (|\textit{producer}\verb|)|\\
+\hspace{5mm}\verb|	/CreationDate (|\textit{date}\verb|)|\\
+\hspace{5mm}\verb|	/ModDate (|\textit{date}\verb|)|\\
+\hspace{5mm}\verb|	/Subject (|\textit{subject}\verb|)|\\
+\hspace{5mm}\verb|	/Keywords (|\textit{keywords, separated by ;}\verb|)|\\
+\verb|	}|\\
+
+
+\subsection{Title}
+\settowidth{\MyLen}{\texttt{.author.text.} }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\author{!\textit{text}\verb!}! & Author of document. \\
+\verb!\title{!\textit{text}\verb!}!  & Title of document. \\
+\verb!\date{!\textit{text}\verb!}!   & Date. \\
+\end{tabular}
+
+These commands go before \verb!\begin{document}!.  The declaration
+\verb!\maketitle! goes at the top of the document.
+
+\subsection{Miscellaneous}
+\settowidth{\MyLen}{\texttt{.pagestyle.empty.} }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\pagestyle{empty}!     &   Empty header, footer
+                                 and no page numbers. \\
+\verb!\tableofcontents!      &   Add a table of contents here. \\
+
+\end{tabular}
+
+
+
+\section{Document structure}
+\begin{multicols}{2}
+\verb!\part{!\textit{title}\verb!}!  \\
+\verb!\chapter{!\textit{title}\verb!}!  \\
+\verb!\section{!\textit{title}\verb!}!  \\
+\verb!\subsection{!\textit{title}\verb!}!  \\
+\verb!\subsubsection{!\textit{title}\verb!}!  \\
+\verb!\paragraph{!\textit{title}\verb!}!  \\
+\verb!\subparagraph{!\textit{title}\verb!}!
+\end{multicols}
+{\raggedright
+Use \verb!\setcounter{secnumdepth}{!$x$\verb!}! suppresses heading
+numbers of depth $>x$, where \verb!chapter! has depth 0.
+Use a \texttt{*}, as in \verb!\section*{!\textit{title}\verb!}!,
+to not number a particular item---these items will also not appear
+in the table of contents.
+}
+
+\subsection{Text environments}
+\settowidth{\MyLen}{\texttt{.begin.quotation.}}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\begin{comment}!    &  Comment (not printed). Requires \texttt{verbatim} package. \\
+\verb!\begin{quote}!      &  Indented quotation block. \\
+\verb!\begin{quotation}!  &  Like \texttt{quote} with indented paragraphs. \\
+\verb!\begin{verse}!      &  Quotation block for verse.
+\end{tabular}
+
+\subsection{Lists}
+\settowidth{\MyLen}{\texttt{.begin.description.}}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\begin{enumerate}!        &  Numbered list. \\
+\verb!\begin{itemize}!          &  Bulleted list. \\
+\verb!\begin{description}!      &  Description list. \\
+\verb!\item! \textit{text}      &  Add an item. \\
+\verb!\item[!\textit{x}\verb!]! \textit{text}
+                                &  Use \textit{x} instead of normal
+                        bullet or number.  Required for descriptions. \\
+\end{tabular}
+
+
+
+
+\subsection{References}
+\settowidth{\MyLen}{\texttt{.pageref.marker..}}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\label{!\textit{marker}\verb!}!   &  Set a marker for cross-reference, 
+                          often of the form \verb!\label{sec:item}!. \\
+\verb!\ref{!\textit{marker}\verb!}!   &  Give section/body number of marker. \\
+\verb!\cref{!\textit{marker}\verb!}! & Give number and description of marker. Requires the \texttt{cleveref} package. \\
+\verb!\pageref{!\textit{marker}\verb!}! &  Give page number of marker. \\
+\verb!\nocite{!\textit{marker}\verb!}! & Include citation in references but not in text. \\
+\verb!\footnote{!\textit{text}\verb!}!  &  Print footnote at bottom of page. \\
+\end{tabular}
+Use \verb|\usepackage{|\textit{showkeys}\verb|}| to show labels at the margins of the document and
+\verb|\usepackage[|\textit{final}\verb|]{|\textit{showkeys}\verb|}| to hide labels before final build. \\
+
+
+\subsection{Floating bodies}
+\settowidth{\MyLen}{\texttt{.begin.equation..place.}}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\begin{table}[!\textit{place}\verb!]!     &  Add numbered table. \\
+\verb!\begin{figure}[!\textit{place}\verb!]!    &  Add numbered figure. \\
+\verb!\begin{equation}[!\textit{place}\verb!]!  &  Add numbered equation. \\
+\verb!\caption{!\textit{text}\verb!}!           &  Caption for the body. \\
+\verb!\captionsetup{! & Center the caption. Requires the \\ %
+\hspace*{3ex}\textit{justification=centering}\verb!}! &  \textit{captions} package. \\
+\verb|\centering| & Centers the float if put right after the \verb|\begin{}| environment.\\
+\end{tabular}
+
+The \textit{place} is a list valid placements for the body.  \texttt{t}=top,
+\texttt{h}=here, \texttt{b}=bottom, \texttt{p}=separate page, \texttt{!}=place even if ugly.  Captions and label markers should be within the environment.
+
+%---------------------------------------------------------------------------
+
+\section{Text properties}
+
+\subsection{Font face}
+\newcommand{\FontCmd}[3]{\PBS\verb!\#1{!\textit{text}\verb!}!  \> %
+                         \verb!{\#2 !\textit{text}\verb!}! \> %
+                         \#1{#3}}
+\begin{tabular}{@{}l@{}l@{}l@{}}
+\textit{Command} & \textit{Declaration} & \textit{Effect} \\
+\verb!\textrm{!\textit{text}\verb!}!                    & %
+        \verb!{\rmfamily !\textit{text}\verb!}!               & %
+        \textrm{Roman family} \\
+\verb!\textsf{!\textit{text}\verb!}!                    & %
+        \verb!{\sffamily !\textit{text}\verb!}!               & %
+        \textsf{Sans serif family} \\
+\verb!\texttt{!\textit{text}\verb!}!                    & %
+        \verb!{\ttfamily !\textit{text}\verb!}!               & %
+        \texttt{Typewriter family} \\
+\verb!\textmd{!\textit{text}\verb!}!                    & %
+        \verb!{\mdseries !\textit{text}\verb!}!               & %
+        \textmd{Medium series} \\
+\verb!\textbf{!\textit{text}\verb!}!                    & %
+        \verb!{\bfseries !\textit{text}\verb!}!               & %
+        \textbf{Bold series} \\
+\verb!\textup{!\textit{text}\verb!}!                    & %
+        \verb!{\upshape !\textit{text}\verb!}!               & %
+        \textup{Upright shape} \\
+\verb!\textit{!\textit{text}\verb!}!                    & %
+        \verb!{\itshape !\textit{text}\verb!}!               & %
+        \textit{Italic shape} \\
+\verb!\textsl{!\textit{text}\verb!}!                    & %
+        \verb!{\slshape !\textit{text}\verb!}!               & %
+        \textsl{Slanted shape} \\
+\verb!\textsc{!\textit{text}\verb!}!                    & %
+        \verb!{\scshape !\textit{text}\verb!}!               & %
+        \textsc{Small Caps shape} \\
+\verb!\emph{!\textit{text}\verb!}!                      & %
+        \verb!{\em !\textit{text}\verb!}!               & %
+        \emph{Emphasized} \\
+\verb!\textnormal{!\textit{text}\verb!}!                & %
+        \verb!{\normalfont !\textit{text}\verb!}!       & %
+        \textnormal{Document font} \\
+\verb!\underline{!\textit{text}\verb!}!                 & %
+                                                        & %
+        \underline{Underline}\\
+\verb|\textsuperscript{|\textit{text}\verb|}| &%
+		&%
+		\textsuperscript{Superscript}
+\end{tabular}
+
+The \textit{command} form handles spacing better than the
+\textit{declaration} form.
+
+\subsection{Font size}
+\setlength{\columnsep}{14pt} % Need to move columns apart a little
+\begin{multicols}{2}
+\begin{tabbing}
+\verb!\footnotesize!          \= \kill
+\textit{Command} 	\>	\textit{Example}\\
+\verb!\tiny!                  \>  \tiny{tiny} \\
+\verb!\scriptsize!            \>  \scriptsize{scriptsize} \\
+\verb!\footnotesize!          \>  \footnotesize{footnotesize} \\
+\verb!\small!                 \>  \small{small} \\
+\verb!\normalsize!            \>  \normalsize{normalsize} \\
+\verb!\large!                 \>  \large{large} \\
+\textit{Command} 	\=	\textit{Example}\\
+\verb!\Large!             						    \>  \Large{Large} \\  % Tab hack for new column
+\verb!\LARGE!                 \>  \LARGE{LARGE} \\
+\verb!\huge!                  \>  \huge{huge} \\
+\verb!\Huge!                  \>  \Huge{Huge}
+\end{tabbing}
+\end{multicols}
+\setlength{\columnsep}{1pt} % Set column separation back
+
+These are declarations and should be used in the form
+\verb!{\small! \ldots\verb!}!, or without braces to affect the entire
+document.
+
+
+\subsection{Verbatim text}
+
+\settowidth{\MyLen}{\texttt{.begin.verbatim..} }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb@\begin{verbatim}@ & Verbatim environment. \\
+\verb@\begin{verbatim*}@ & Spaces are shown as \verb*@ @. \\
+\verb@\verb!text!@ & Text between the delimiting characters (in this case %
+                      `\texttt{!}') is verbatim.
+\end{tabular}
+
+
+\subsection{Justification}
+\begin{tabular}{@{}ll@{}}
+\textit{Environment}  &  \textit{Declaration}  \\
+\verb!\begin{center}!      & \verb!\centering!  \\
+\verb!\begin{flushleft}!  & \verb!\raggedright! \\
+\verb!\begin{flushright}! & \verb!\raggedleft!  \\
+\end{tabular}
+
+\subsection{Miscellaneous}
+\verb!\linespread{!$x$\verb!}! changes the line spacing by the
+multiplier $x$.
+
+
+
+
+
+\section{Text-mode symbols}
+
+\subsection{Symbols}
+\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{2em}}|l@{\hspace{1em}}l@{\hspace{2em}}|l@{\hspace{1em}}l@{\hspace{2em}}|l@{\hspace{1em}}l@{}}
+\&              &  \verb!\&! & 
+\_              &  \verb!\_! &
+\ldots          &  \verb!\ldots! &
+\textbullet     &  \verb!\textbullet! \\
+\$              &  \verb!\$! &
+\^{}            &  \verb!\^{}! &
+\textbar        &  \verb!\textbar! &
+\textbackslash  &  \verb!\textbackslash! \\
+\%              &  \verb!\%! &
+\~{}            &  \verb!\~{}! &
+\#              &  \verb!\#! &
+\S              &  \verb!\S! \\
+\pounds & \verb|\pounds| &
+\officialeuro & \verb|\officialeuro|\textsuperscript{\dag} &
+\dag & \verb|\dag| &
+\ddag & \verb|\ddag| \\
+\$ & \verb|\$| & & & & & \textasteriskcentered & \scriptsize{\verb|\textasteriskcentered|} \\
+\end{tabular}
+\textsuperscript{\dag}requires the \textit{eurosym} package\\
+If \textit{marvosym} is also loaded, put \textit{eurosym} after it to avoid conflict with the euro sign.
+
+\subsection{Communication symbols}
+\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{}}
+\Email & \verb|\Email| & \FAX & \verb|\FAX| & \Letter & \verb|\Letter| & \Telefon & \verb|\Telefon|\textsuperscript{\dag} \\
+\faMobilePhone & \verb|\faMobilePhone| & \faTwitter & \verb|\faTwitter| & \faLinkedin & \verb|\faLinkedin| & \faFacebook & \verb|\faFacebook|\textsuperscript{\ddag} \\
+\end{tabular}
+\textsuperscript{\dag}require the \textit{marvosym} package
+\textsuperscript{\ddag} require the \textit{fontawesome} package
+
+\subsection{Copyright\textsuperscript{\dag}}
+\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{}}
+	\ccLogo & \verb|\ccLogo| & \ccAttribution & \verb|\ccAttribution| & \ccCopy & \verb|\ccCopy| \\
+	\ccShareAlike & \verb|\ccShareAlike| & \ccPublicDomain & \verb|\ccPublicDomain| & \ccNonCommercialEU & \verb|\ccNonCommercialEU|  \\
+	\ccShare & \verb|\ccShare| & \ccbyncnd & \verb|\ccbyncnd| & \textcopyright & \verb|\textcopyright|
+\end{tabular}
+\textsuperscript{\dag}require the \textit{ccicons} package\\
+If \textit{fontawsome} is also loaded, put \verb|\let\ccby=\CCby| and
+\verb|\usepackage{ccicons}| right after it to avoid conflict of \verb|\ccby|
+
+
+\subsection{Accents}
+\begin{tabular}{@{}l@{\ }l|l@{\ }l|l@{\ }l|l@{\ }l|l@{\ }l@{}}
+\`o   & \verb!\`o! &
+\'o   & \verb!\'o! &
+\^o   & \verb!\^o! &
+\~o   & \verb!\~o! &
+\=o   & \verb!\=o! \\
+\.o   & \verb!\.o! &
+\"o   & \verb!\"o! &
+\c o  & \verb!\c o! &
+\v o  & \verb!\v o! &
+\H o  & \verb!\H o! \\
+\c c  & \verb!\c c! &
+\d o  & \verb!\d o! &
+\b o  & \verb!\b o! &
+\t oo & \verb!\t oo! &
+\oe   & \verb!\oe! \\
+\OE   & \verb!\OE! &
+\ae   & \verb!\ae! &
+\AE   & \verb!\AE! &
+\aa   & \verb!\aa! &
+\AA   & \verb!\AA! \\
+\o    & \verb!\o! &
+\O    & \verb!\O! &
+\l    & \verb!\l! &
+\L    & \verb!\L! &
+\i    & \verb!\i! \\
+\j    & \verb!\j! &
+!`    & \verb!~`! &
+?`    & \verb!?`! &
+\end{tabular}
+
+
+\subsection{Delimiters}
+\begin{tabular}{@{}l@{\ }l|l@{\ }l|l@{\ }l|l@{\ }l|l@{\ }l|l@{\ }l@{}}
+`       & \verb!`!  &
+``      & \verb!``! &
+\{      & \verb!\{! &
+\lbrack & \verb![! &
+(       & \verb!(! &
+\textless  &  \verb!\textless! \\
+'       & \verb!'!  &
+''      & \verb!''! &
+\}      & \verb!\}! &
+\rbrack & \verb!]! &
+)       & \verb!)! &
+\textgreater  &  \verb!\textgreater! \\
+\end{tabular}
+
+\subsection{Dashes}
+\begin{tabular}{@{}llll@{}}
+\textit{Name} & \textit{Source} & \textit{Example} & \textit{Usage} \\
+hyphen  & \verb!-!   & X-ray          & In words. \\
+en-dash & \verb!--!  & 1--5           & Between numbers. \\
+em-dash & \verb!---! & Yes---or no?    & Punctuation.
+\end{tabular}
+
+
+\subsection{Line and page breaks}
+\settowidth{\MyLen}{\texttt{.pagebreak} }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\\!          &  Begin new line without new paragraph.  \\
+\verb!\\*!         &  Prohibit pagebreak after linebreak. \\
+\verb!\kill!       &  Don't print current line. \\
+\verb!\pagebreak!  &  Start new page. \\
+\verb!\noindent!   &  Do not indent current line.
+\end{tabular}
+
+
+\subsection{Miscellaneous}
+\settowidth{\MyLen}{\texttt{.rule.w..h.} }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\today!  &  \today. \\
+\verb!$\sim$!  &  Prints $\sim$ instead of \verb!\~{}!, which makes \~{}. \\
+\verb!~!       &  Space, disallow linebreak (\verb!W.J.~Clinton!). \\
+\verb!\@.!     &  Indicate that the \verb!.! ends a sentence when following
+                        an uppercase letter. \\
+\verb!\hspace{!$l$\verb!}! & Horizontal space of length $l$
+                                (Ex: $l=\mathtt{20pt}$). \\
+\verb!\vspace{!$l$\verb!}! & Vertical space of length $l$. \\
+\verb!\rule{!$w$\verb!}{!$h$\verb!}! & Line of width $w$ and height $h$. \\
+\end{tabular}
+
+
+
+\section{Tabular environments}
+
+\subsection{\texttt{tabbing} environment}
+\begin{tabular}{@{}l@{\hspace{1.5ex}}l@{\hspace{10ex}}l@{\hspace{1.5ex}}l@{}}
+\verb!\=!  &   Set tab stop. &
+\verb!\>!  &   Go to tab stop.
+\end{tabular}
+
+Tab stops can be set on ``invisible'' lines with \verb!\kill!
+at the end of the line.  Normally \verb!\\! is used to separate lines.
+
+
+\subsection{\texttt{tabular} environment}
+\verb!\begin{array}[!\textit{pos}\verb!]{!\textit{cols}\verb!}!   \\
+\verb!\begin{tabular}[!\textit{pos}\verb!]{!\textit{cols}\verb!}! \\
+\verb!\begin{tabular*}{!\textit{width}\verb!}[!\textit{pos}\verb!]{!\textit{cols}\verb!}!
+
+
+\subsubsection{\texttt{tabular} column specification}
+\settowidth{\MyLen}{\texttt{p}\{\textit{width}\} \ }
+\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
+\texttt{l}    &   Left-justified column.  \\
+\texttt{c}    &   Centered column.  \\
+\texttt{r}    &   Right-justified column. \\
+\verb!p{!\textit{width}\verb!}!  &  Same as %
+                              \verb!\parbox[t]{!\textit{width}\verb!}!. \\ 
+\verb!@{!\textit{decl}\verb!}!   &  Insert \textit{decl} instead of
+                                    inter-column space. \\
+\verb!|!      &   Inserts a vertical line between columns. 
+\end{tabular}
+
+
+\subsubsection{\texttt{tabular} elements}
+\settowidth{\MyLen}{\texttt{.cline.x-y..}}
+\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
+\verb!\hline!           &  Horizontal line between rows.  \\
+\verb!\cline{!$x$\verb!-!$y$\verb!}!  &
+                        Horizontal line across columns $x$ through $y$. \\
+\verb!\multicolumn{!\textit{n}\verb!}{!\textit{cols}\verb!}{!\textit{text}\verb!}! \\
+        &  A cell that spans \textit{n} columns, with \textit{cols} column specification.
+\end{tabular}
+
+\section{Non-latin characters}
+To output non-latin characters, you should use a different rendering engine than \LaTeX ~or {\tiny PDF}\LaTeX, for example \XeLaTeX ~or \LuaLaTeX.\\
+If you only occassionally want to output non-latin characters, you can do that using a supported package. For example, to output Greek upright letters (which are different than greek letters for math [written between \$\$, e.g. \verb|$\gamma$, $\vartheta$| produces $\gamma$, $\vartheta$] ) load the \textit{babel} package with options for the required languages (last languate is always the default).\\ For example, \verb|\usepackage[greek, english]{babel}|. \\
+\vspace*{2ex}
+Then signify the letters to be outputed in Greek glyphs by wrapping them around a \verb|\textgreek| tag:\\
+\vspace*{2ex}
+
+\hspace*{2cm}\verb|\textgreek{abgdezhjiklmnx'oprsctufqyw}|
+\hspace*{4.2cm}\textgreek{abgdezhjiklmnx'oprsctufqyw}
+\footnotesize
+
+%\subsection{Special symbols}
+%\begin{tabular}{@{}ll@{}}
+%$^{\circ}$  &  \verb!^{\circ}! Ex: $22^{\circ}\mathrm{C}$: \verb!$22^{\circ}\mathrm{C}$!.
+%\end{tabular}
+
+\section{Bibliography and citations}
+When using \BibTeX, you need to run \texttt{latex} then \texttt{bibtex} and then
+\texttt{latex} twice more to resolve dependencies.
+Citation types and commands will also depend on the selected citation style; refer to the style's documentation for specific commands.\\
+Note that \BibTeX \space has been superceded by \textbf{\hologo{biber}}; \textbf{\hologo{biber}} allows the use of {\tiny BIB}\LaTeX \space instead of \verb|natbib| to typeset the bibliography, which produces significantly more advanced output styles.
+
+
+\subsection{Citation types}
+\settowidth{\MyLen}{\texttt{.shortciteN.key..}}
+\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
+\verb!\cite{!\textit{key}\verb!}!       &
+        Full author list and year. (Watson and Crick 1953) \\
+\verb!\citeA{!\textit{key}\verb!}!      &
+        Full author list. (Watson and Crick) \\
+\verb!\citeN{!\textit{key}\verb!}!      &
+        Full author list and year. Watson and Crick (1953) \\
+\verb!\shortcite{!\textit{key}\verb!}!  &
+        Abbreviated author list and year. (Watson et al. 1953) \\
+\verb!\shortciteA{!\textit{key}\verb!}! &
+        Abbreviated author list. (Watson et al.) \\
+\verb!\shortciteN{!\textit{key}\verb!}! &
+        Abbreviated author list and year. Watson et al. (1953) \\
+\verb!\citeyear{!\textit{key}\verb!}!   &
+        Cite year only. (1953) \\
+\end{tabular}
+
+All the above have an \texttt{NP} variant without parentheses;
+Ex. \verb!\citeNP!.
+
+
+\subsection{\BibTeX\ entry types}
+\settowidth{\MyLen}{\texttt{.mastersthesis.}}
+\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
+\verb!@article!         &  Journal or magazine article. \\
+\verb!@book!            &  Book with publisher. \\
+\verb!@booklet!         &  Book without publisher. \\
+\verb!@conference!      &  Article in conference proceedings. \\
+\verb!@inbook!          &  A part of a book and/or range of pages. \\
+\verb!@incollection!    &  A part of book with its own title. \\
+%\verb!@manual!          &  Technical documentation. \\
+%\verb!@mastersthesis!   &  Master's thesis. \\
+\verb!@misc!            &  If nothing else fits. \\
+\verb!@phdthesis!       &  PhD. thesis. \\
+\verb!@proceedings!     &  Proceedings of a conference. \\
+\verb!@techreport!      &  Tech report, usually numbered in series. \\
+\verb!@unpublished!     &  Unpublished. \\
+\end{tabular}
+
+\subsection{\BibTeX\ fields}
+\settowidth{\MyLen}{\texttt{organization.}}
+\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
+\verb!address!         &  Address of publisher.  Not necessary for major
+                                publishers.  \\
+\verb!author!           &  Names of authors, of format .... \\
+\verb!booktitle!        &  Title of book when part of it is cited. \\
+\verb!chapter!          &  Chapter or section number. \\
+\verb!edition!          &  Edition of a book. \\
+\verb!editor!           &  Names of editors. \\
+\verb!institution!      &  Sponsoring institution of tech.\ report. \\
+\verb!journal!          &  Journal name. \\
+\verb!key!              &  Used for cross ref.\ when no author. \\
+\verb!month!            &  Month published. Use 3-letter abbreviation. \\
+\verb!note!             &  Any additional information. \\
+\verb!number!           &  Number of journal or magazine. \\
+\verb!organization!     &  Organization that sponsors a conference. \\
+\verb!pages!            &  Page range (\verb!2,6,9--12!). \\
+\verb!publisher!        &  Publisher's name. \\
+\verb!school!           &  Name of school (for thesis). \\
+\verb!series!           &  Name of series of books. \\
+\verb!title!            &  Title of work. \\
+\verb!type!             &  Type of tech.\ report, ex. ``Research Note''. \\
+\verb!volume!           &  Volume of a journal or book. \\
+\verb!year!             &  Year of publication. \\
+\end{tabular}
+Not all fields need to be filled.  See example below.
+
+\subsection{Common \BibTeX\ style files}
+\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{3em}}l@{\hspace{1em}}l@{}}
+\verb!abbrv!    &  Standard &
+\verb!abstract! &  \texttt{alpha} with abstract \\
+\verb!alpha!    &  Standard &
+\verb!apa!      &  APA \\
+\verb!plain!    &  Standard &
+\verb!unsrt!    &  Unsorted \\
+\end{tabular}
+
+The \LaTeX\ document should have the following two lines just before
+\verb!\end{document}!, where \verb!bibfile.bib! is the name of the
+\BibTeX\ file.
+\begin{verbatim}
+\bibliographystyle{plain}
+\bibliography{bibfile}
+\end{verbatim}
+
+\subsection{\BibTeX\ example}
+The \BibTeX\ database goes in a file called
+\textit{file}\texttt{.bib}, which is processed with \verb!bibtex file!. 
+\begin{verbatim}
+@String{N = {Na\-ture}}
+@Article{WC:1953,
+  author  = {James Watson and Francis Crick},
+  title   = {A structure for Deoxyribose Nucleic Acid},
+  journal = N,
+  volume  = {171},
+  pages   = {737},
+  year    = 1953
+}
+\end{verbatim}
+
+
+%\subsection{Automatically add fullstops at the end of footnotes}
+%\begin{verbatim}
+%\makeatletter%
+%\long\def\@makefntext#1{%
+%\parindent 1em\noindent \hb@xt@ 1.8em{\hss\@makefnmark}#1%
+%\ifnum\the\spacefactor<3000.\fi}
+%\makeatother
+%\end{verbatim}
+
+\section{Sample \LaTeX\ document}
+\begin{verbatim}
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\title{Template}
+\author{Name}
+\begin{document}
+\maketitle
+
+\section{section}
+\subsection*{subsection without number}
+text \textbf{bold text} text. Some math: $2+2=5$
+\subsection{subsection}
+text \emph{emphasized text} text. \cite{WC:1953}
+discovered the structure of DNA.
+
+A table:
+\begin{table}[!th]
+\begin{tabular}{|l|c|r|}
+\hline
+first  &  row  &  data \\
+second &  row  &  data \\
+\hline
+\end{tabular}
+\caption{This is the caption}
+\label{ex:table}
+\end{table}
+
+The table is numbered \ref{ex:table}.
+\end{document}
+\end{verbatim}
+
+
+
+
+
+\rule{0.3\linewidth}{0.25pt}\\
+\scriptsize
+For a complete reference and other tips, see: \\
+$\Rightarrow$
+Winston Chang, \LaTeXe Cheat Sheet:\\
+\hspace*{1.2em} \href{http://www.stdout.org/~winston/latex/}{http://www.stdout.org/$\sim$winston/latex/}\\
+$\Rightarrow$
+How to TeX:\\ \hspace*{1.2em} \href{http://www.howtotex.com/}{http://www.howtotex.com/}\\
+$\Rightarrow$
+Scott Pakin, The Comprehensive \LaTeX Symbol List:\\
+\hspace*{1.2em} \href{http://mirror.unl.edu/ctan/info/symbols/comprehensive/symbols-a4.pdf}{http://mirror.unl.edu/ctan/info/symbols/comprehensive/symbols-a4.pdf}
+
+
+
+\end{multicols}
+
+\end{document}
