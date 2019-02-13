@@ -1,0 +1,58 @@
+%% ----------------------------------------------------------------
+%% Progress.tex
+%% ---------------------------------------------------------------- 
+%TODO Change to `ecsprogress' for a 9month or `ecsminithesis' for an 18month report or `ecsthesis' for the final thesis.
+\documentclass{ecsthesis}    % Use the progress Style
+\graphicspath{{../Images/}{./Images/}{../../Images/}}   % Location of your graphics files
+%%----------Packages-go-here------------------------------------
+\usepackage{subfiles} %<------ Instead of \input{file} or \include{file}, use \subfile{file}. The child documents must contain:
+% \documentclass[main.tex]{subfiles}
+% \begin{document}
+% ..... some content ......
+% \end{document}
+
+%USE COMMON PREAMBLE
+\input{../Preamble/Preamble.tex}
+
+%TODO Personalise the document changing the info in the document below:
+\input{../Preamble/Info.tex}
+
+\begin{document}
+\frontmatter
+\maketitle
+\input{../Preamble/Abstract.tex} %TODO <---------- Abstract goes here
+
+\tableofcontents \cleardoublepage \addcontentsline{toc}{chapter}{List of Figures} \listoffigures \cleardoublepage \addcontentsline{toc}{chapter}{List of tables} \listoftables \cleardoublepage \authorshipdeclaration{} %<--Leave blank
+
+\acknowledgements{Thanks to \dots}
+
+%List of abbreviations using the nomencl package:
+\renewcommand{\nomname}{\Large Abbreviations} \addcontentsline{toc}{chapter}{Abbreviations}
+%To define abbreviations use: \nom{ABRV.}{Explanation} - the ABRV will also be printed
+\printnomenclature %TODO to make nomenclature appear you need to run in terminal: makeindex filename.nlo -s nomencl.ist -o filename.nls %to record entries, use \nom{ABR.}{full entry}
+
+\cleardoublepage \dedicatory{To \dots} \cleardoublepage
+
+\mainmatter
+%% ----------------------------------------------------------------------------------
+%% ------------------ Chapter files go here -------------------------------------------
+%% ----------------------------------------------------------------------------------
+
+\subfile{../Introduction/Introduction} %<--- Add chapters as needed
+
+\subfile{../Chapter1/Chapter1}
+
+%% ----------------------------------------------------------------------------------
+%% ----------------- End of Chapters -------------------------------------------------
+%% ----------------------------------------------------------------------------------
+%% ------------------- Appendices ---------------------------------------------------
+%% ----------------------------------------------------------------------------------
+\appendix
+\subfile{../Appendices/AppendixA}
+\clearpage
+%% ----------------------------------------------------------------------------------
+%% ---------------- End of content ---------------------------------------------------
+%% ----------------------------------------------------------------------------------
+\backmatter
+\printbibliography[]
+\end{document}

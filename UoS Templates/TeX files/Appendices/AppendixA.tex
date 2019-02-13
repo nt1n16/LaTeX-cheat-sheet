@@ -1,0 +1,20 @@
+% !TeX root = AppendixA.tex
+%% ----------------------------------------------------------------
+%% AppendixA.tex
+%% ---------------------------------------------------------------- 
+
+\documentclass[../main/Progress.tex]{subfiles}
+
+%\addbibresource{../Bibliography/biblio.bib} %%uncomment to provide auto-complete
+
+\begin{document}
+	\begingroup
+	\setcounter{savefootnote}{\value{footnote}}% Store footnote counter
+	\setcounter{footnote}{1}% Reset footnote counter
+	\renewcommand{\thefootnote}{\fnsymbol{footnote}}% Modify footnote printing
+\chapter[Sample Appendix]{Sample Appendix\raisebox{1ex}{{\Large\footnotemark}}}
+\footnotetext{Sample title footnote}
+\setcounter{footnote}{\value{savefootnote}}% Restore footnote counter
+\endgroup
+
+\end{document}
