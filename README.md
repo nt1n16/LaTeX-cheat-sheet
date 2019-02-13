@@ -15,6 +15,8 @@ Depending on your workflow, two methods of installing are available:
 #### Overleaf installation ####
 If you are using [Overleaf](https://www.overleaf.com/ "Overleaf"), simply download the **online-zip** file and upload it straight to Overleaf
 (*New project -> Upload project -> Choose zip file*).
+You might have to provide a copy of the *.cls* file in every sub-folder, if Overleaf complains about an unknown class.
+**Bear in mind that Overleaf does not always play nice with subfiles, so you might have to resort to `\include` or `\input` commands instead**
 
 #### Local installation ####
 If you are working with a local LaTeX installation, you will have to install the template *.tex* files and the accompanying class files
