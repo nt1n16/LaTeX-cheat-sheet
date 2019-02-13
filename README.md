@@ -13,6 +13,7 @@ Two versions of the zip file are available, one for local and one for online ins
 Depending on your workflow, two methods of installing are available:
 
 #### Overleaf installation ####
+**Disclaimer:** This template hasn't been tested for use with Overleaf; although technically it should work, if installation issues arise, you are on your own!
 If you are using [Overleaf](https://www.overleaf.com/ "Overleaf"), simply download the **online-zip** file and upload it straight to Overleaf
 (*New project -> Upload project -> Choose zip file*).
 You might have to provide a copy of the *.cls* file in every sub-folder, if Overleaf complains about an unknown class.
