@@ -75,7 +75,7 @@ this way, if you come across any issues, you can revert back to a clean copy. Co
                   '--> Preable 
                                     '--> Abstract.tex   #The abstract
                                     '--> Info.tex      #All customisation options are contained here
-                                    '--> Preamble.tex   #File containing extra commands and instructions for LaTeX   
+                                    '--> Preamble.tex   #File containing extra commands and instructions for LaTeX. Any additional packages you want to include can go there.   
  
 
 
